@@ -68,9 +68,11 @@ const MainBody=()=>{
         setCityData(data);
         generateMarkup();
         setLoader(false);
+        if(data.length<1)alert("No place found. Please enter valid place name.")
     });
     }
     catch(err){
+        alert(err);
         setLoader(false);}
 }
     const fetchWeather= async function(id){ 
@@ -101,7 +103,7 @@ const MainBody=()=>{
         setWeatherReport_min(
                     <div className={classes.weatherDisplay}>
                         <div className={classes.tempDiv}>
-                            {weatherData.consolidated_weather[0].the_temp.toFixed(2)}
+                            {weatherData.consolidated_weather[0].the_temp.toFixed(2)}<span>&deg;C</span>
                         </div>
                         <div className={classes.LocationDiv}>
                             <div className={classes.cityNameDiv}>{weatherData.title}</div>
@@ -129,9 +131,9 @@ const MainBody=()=>{
                     <div className={classes.weatherList} >
                     <p>Visibility</p> <p>{weatherData.consolidated_weather[0].visibility.toFixed(2)}</p></div>
                     <div className={classes.weatherList} >
-                        <p>Max Temperature</p> <p>{weatherData.consolidated_weather[0].max_temp.toFixed(2)}</p></div>
+                        <p>Max Temperature</p> <p>{weatherData.consolidated_weather[0].max_temp.toFixed(2)}<span>&deg;C</span></p></div>
                     <div className={classes.weatherList} >
-                    <p>Min Temperature</p> <p>{weatherData.consolidated_weather[0].min_temp.toFixed(2)}</p></div>
+                    <p>Min Temperature</p> <p>{weatherData.consolidated_weather[0].min_temp.toFixed(2)}<span>&deg;C</span></p></div>
                     <div className={classes.weatherList} ><p>Wind</p> <p> {wind}</p></div>
                 </div>
                 );
@@ -163,7 +165,7 @@ const MainBody=()=>{
                                 title={weatherData.consolidated_weather[1].weather_state_name}
                                 style={{backgroundImage:`URL("${weatherIcon1}")`}}>
                             </div>
-                            <div className={classes.futureTemp}>temp-{weatherData.consolidated_weather[1].the_temp.toFixed(2)}</div>
+                            <div className={classes.futureTemp}>temp:{weatherData.consolidated_weather[1].the_temp.toFixed(2)}&deg;c</div>
                         </div>
                         <div className={classes.futureDays}>
                             <div className={classes.DayText}>{tempDay2}</div>
@@ -171,7 +173,7 @@ const MainBody=()=>{
                                 title={weatherData.consolidated_weather[2].weather_state_name}
                                 style={{backgroundImage:`URL("${weatherIcon2}")`}}>
                             </div>
-                            <div className={classes.futureTemp}>temp-{weatherData.consolidated_weather[2].the_temp.toFixed(2)}</div>
+                            <div className={classes.futureTemp}>temp:{weatherData.consolidated_weather[2].the_temp.toFixed(2)}&deg;c</div>
                         </div>
                         <div className={classes.futureDays}>
                             <div className={classes.DayText}>{tempDay3}</div>
@@ -179,7 +181,7 @@ const MainBody=()=>{
                                 title={weatherData.consolidated_weather[3].weather_state_name}
                                 style={{backgroundImage:`URL("${weatherIcon3}")`}}>
                             </div>
-                            <div className={classes.futureTemp}>temp-{weatherData.consolidated_weather[3].the_temp.toFixed(2)}</div>
+                            <div className={classes.futureTemp}>temp:{weatherData.consolidated_weather[3].the_temp.toFixed(2)}&deg;c</div>
                         </div>
                         <div className={classes.futureDays}>
                             <div className={classes.DayText}>{tempDay4}</div>
@@ -187,7 +189,7 @@ const MainBody=()=>{
                                 title={weatherData.consolidated_weather[4].weather_state_name}
                                 style={{backgroundImage:`URL("${weatherIcon4}")`}}>
                             </div>
-                            <div className={classes.futureTemp}>temp-{weatherData.consolidated_weather[4].the_temp.toFixed(2)}</div>
+                            <div className={classes.futureTemp}>temp:{weatherData.consolidated_weather[4].the_temp.toFixed(2)}&deg;c</div>
                         </div>
                         <div className={classes.futureDays}>
                             <div className={classes.DayText}>{tempDay5}</div>
@@ -195,12 +197,11 @@ const MainBody=()=>{
                                 title={weatherData.consolidated_weather[5].weather_state_name}
                                 style={{backgroundImage:`URL("${weatherIcon5}")`}}>
                             </div>
-                            <div className={classes.futureTemp}>temp-{weatherData.consolidated_weather[5].the_temp.toFixed(2)}</div>
+                            <div className={classes.futureTemp}>temp:{weatherData.consolidated_weather[5].the_temp.toFixed(2)}&deg;c</div>
                         </div>
                     </div>
                 </div>
                 );
-                setCityList('');
     }
     const cityClick=useCallback((id,e)=>{
         e.stopPropagation();
@@ -210,7 +211,8 @@ const MainBody=()=>{
     const SearchChangeHandler = useCallback((e) => {
         setTempSearchText(e.target.value);
       }, []);
-    const searchClick=useCallback(()=>{
+    const searchClick=useCallback((e)=>{
+        e.stopPropagation();
         searchText= tempsearchText;
         if(searchText=='') return;
         setLoader(true);
